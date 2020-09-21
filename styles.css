@@ -1,0 +1,65 @@
+#mobile-header {
+	display: none;
+}
+header {
+	background-color: #303030;
+}
+
+.navbar {
+	width: 80%;
+	margin: 0 auto;
+}
+
+.currentDay,
+.localTime {
+	cursor: alias;
+}
+
+.container {
+	max-width: 90%;
+}
+
+h1 {
+	font-size: 30px !important;
+}
+
+#taskArea {
+	background-color: #303030;
+	font-size: 18px;
+	border: none;
+	color: rgb(255, 255, 255, 0.35);
+}
+
+.card-header {
+	font-size: 18px;
+}
+
+.card-header span {
+	font-weight: 800;
+}
+
+.card-text {
+	font-size: 18px;
+	cursor: text;
+}
+
+/* Media Queries for responsive UX */
+@media screen and (max-width: 769px) {
+	#desktop-header {
+		display: none;
+	}
+	#mobile-header {
+		display: block;
+	}
+	h1 {
+		text-align: center;
+		padding-bottom: 15px;
+	}
+	form {
+		width: 90%;
+		margin: 0 auto;
+	}
+	.submit {
+		width: 100%;
+	}
+}
