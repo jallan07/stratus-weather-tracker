@@ -102,6 +102,7 @@ $(document).ready(function () {
 				url: `https://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${apiKey}`,
 				method: "GET",
 			}).then(function (uvIndexCall) {
+				console.log(uvIndexCall);
 				//define the uv index variable
 				var uvIndex = uvIndexCall.value.toFixed(0);
 
