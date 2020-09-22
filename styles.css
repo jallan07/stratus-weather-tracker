@@ -42,17 +42,25 @@ h1 {
 	font-weight: 800;
 }
 
-.card-text {
+.card-body {
 	font-size: 18px;
 	cursor: text;
+	padding: 0 15px;
 }
 
-.current-icon {
-	font-size: 4.2rem;
+.temp-num {
+	font-weight: 800;
 }
 
-.weather-icon {
-	width: 125px;
+.temp-small {
+	font-size: 14px;
+	color: #ffffff91;
+}
+
+.temp-heading,
+.weather-heading {
+	font-size: 14px;
+	color: #ffffff91;
 }
 
 /* Media Queries for responsive UX */

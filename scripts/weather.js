@@ -7,6 +7,8 @@ $(document).ready(function () {
 	var city;
 	var state;
 	var weather;
+	var tempF;
+	var tempK;
 
 	// collect user input from the search form in the main header, and pass that information into the city and state variables above
 	$(".submit").on("click", function (e) {
@@ -15,12 +17,15 @@ $(document).ready(function () {
 		city = $(".city-search").val();
 		state = $(".state-search").val();
 
-		if (city != "" && state != "") {
-			city = $(".city-search").val();
-			state = $(".state-search").val();
-		} else {
+		if ($(".city-search").val() === "") {
 			alert("You must enter both a city AND a state name to continue.");
 			return;
+		} else if ($(".state-search").val() === "Select a state") {
+			alert("You must enter both a city AND a state name to continue.");
+			return;
+		} else {
+			city = $(".city-search").val();
+			state = $(".state-search").val();
 		}
 		console.log(city);
 		console.log(state);
@@ -42,15 +47,44 @@ $(document).ready(function () {
 
 			// pull in the icon from openweather and populate in the current weather field
 			var currentIconCode = response.weather[0].icon;
-			console.log(currentIconCode);
 			var currentIconURL = `http://openweathermap.org/img/wn/${currentIconCode}@2x.png`;
-			console.log(currentIconURL);
+			var desc = response.weather[0].main;
 
+			// print the current weather icon and description to the dom
 			$(".current-icon").html(
-				`<img class="weather-icon" src="${currentIconURL}">`
+				`<img class="weather-icon" src="${currentIconURL}"><br>`
 			);
+
+			// collect the temperature from the api response
+			var tempK = response.main.temp;
+			// convert the temperature from the api response to Fahrenheit
+			var tempF = ((tempK - 273.15) * 1.8 + 32).toFixed(0);
+
+			// print the current temperature to the dom
+			$(".current-weather").html(
+				`<h4 class="temp-num">${tempF}°F </h4>
+				<h6>${desc}<span class="temp-small ml-2">(current)</span></h6>`
+			);
+
+			// dynamically change the color of the weather block borders based on temp
+			if (tempF <= 50) {
+				$(".today-weather").removeClass("border-warning");
+				$(".today-weather").removeClass("border-danger");
+				$(".today-weather").addClass("border-info");
+			}
+			if (tempF > 50 && tempF <= 79) {
+				$(".today-weather").removeClass("border-info");
+				$(".today-weather").removeClass("border-danger");
+				$(".today-weather").addClass("border-warning");
+			}
+			if (tempF > 79) {
+				$(".today-weather").removeClass("border-info");
+				$(".today-weather").removeClass("border-warning");
+				$(".today-weather").addClass("border-danger");
+			}
 		});
 	});
+	// });
 
 	// ———————————————————————— //
 	// —— END Document Ready —— //
