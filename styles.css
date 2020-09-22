@@ -27,12 +27,12 @@ h1 {
 	text-decoration: underline;
 }
 
-#taskArea {
+/* #taskArea {
 	background-color: #303030;
 	font-size: 18px;
 	border: none;
 	color: rgb(255, 255, 255, 0.35);
-}
+} */
 
 .card-header {
 	font-size: 18px;
@@ -45,6 +45,14 @@ h1 {
 .card-text {
 	font-size: 18px;
 	cursor: text;
+}
+
+.current-icon {
+	font-size: 4.2rem;
+}
+
+.weather-icon {
+	width: 125px;
 }
 
 /* Media Queries for responsive UX */

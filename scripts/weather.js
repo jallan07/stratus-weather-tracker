@@ -32,15 +32,23 @@ $(document).ready(function () {
 			url: queryURL,
 			method: "GET",
 		}).then(function (response) {
-			var weather = response;
-			console.log(weather);
-
 			// create and populate an h2 heading
+			console.log(response);
 			var cityHeading = $(".city-heading");
 			cityHeading.html(
-				`<p class="text-center mx-auto">Weather in <span class="underline">${weather.name}, ${state}</span></p>`
+				`<p class="text-center mx-auto">Weather in <span class="underline">${response.name}, ${state}</span></p>`
 			);
 			cityHeading.css("color", "white");
+
+			// pull in the icon from openweather and populate in the current weather field
+			var currentIconCode = response.weather[0].icon;
+			console.log(currentIconCode);
+			var currentIconURL = `http://openweathermap.org/img/wn/${currentIconCode}@2x.png`;
+			console.log(currentIconURL);
+
+			$(".current-icon").html(
+				`<img class="weather-icon" src="${currentIconURL}">`
+			);
 		});
 	});
 
