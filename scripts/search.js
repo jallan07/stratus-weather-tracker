@@ -27,8 +27,6 @@ $(document).ready(function () {
 			city = $(".city-search").val();
 			state = $(".state-search").val();
 		}
-		console.log(city);
-		console.log(state);
 
 		var apiKey = "63f6253feb7c1af59a49c4232d8efc07";
 		var queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${city},${state}&appid=${apiKey}`;
@@ -37,8 +35,8 @@ $(document).ready(function () {
 			url: queryURL,
 			method: "GET",
 		}).then(function (response) {
-			// create and populate an h2 heading
 			console.log(response);
+			// create and populate an h2 heading
 			var cityHeading = $(".city-heading");
 			cityHeading.html(
 				`<p class="text-center mx-auto">Weather in <span class="underline">${response.name}, ${state}</span></p>`
@@ -62,8 +60,8 @@ $(document).ready(function () {
 
 			// print the current temperature to the dom
 			$(".current-weather").html(
-				`<h4 class="temp-num">${tempF}°F </h4>
-				<h6>${desc}<span class="temp-small ml-2">(current)</span></h6>`
+				`<h4 class="temp-num text-center">${tempF}°F </h4>
+				<h6>${desc}<span class="small ml-2">(current)</span></h6>`
 			);
 
 			// dynamically change the color of the weather block borders based on temp
@@ -82,9 +80,53 @@ $(document).ready(function () {
 				$(".today-weather").removeClass("border-warning");
 				$(".today-weather").addClass("border-danger");
 			}
+
+			// define variables for high/low, humidity, wind, and ux index
+			var humidity = response.main.humidity;
+			var wind = response.wind.speed;
+			// var uvIndex = response.wind.speed;
+
+			$(".humidity").html(
+				`<h6 class="text-center">${humidity}%<br><span class="small">Humidity</span></h6>`
+			);
+			$(".wind").html(
+				`<h6 class="text-center">${wind} m/sec<br><span class="small">Wind Speed</span></h6>`
+			);
+
+			// define lat lon coordinate variables so that we can pull the uv index with a secondary api call
+			var lat = response.coord.lat;
+			var lon = response.coord.lon;
+
+			// run a secondary api call to grab the uv index
+			$.ajax({
+				url: `https://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${apiKey}`,
+				method: "GET",
+			}).then(function (uvIndexCall) {
+				//define the uv index variable
+				var uvIndex = uvIndexCall.value.toFixed(0);
+
+				// print the uv index to the dom
+				$(".uv-index").html(
+					`<h6 class="text-center">${uvIndex}<br><span class="small">UV Index</span></h6>`
+				);
+
+				// dynamically update the uv index color based on rating
+				if (uvIndex < 4) {
+					$(".uv-index").css("color", "green");
+				}
+				if (uvIndex >= 4 || uvIndex <= 6) {
+					$(".uv-index").css("color", "yellow");
+				}
+				if (uvIndex > 6) {
+					$(".uv-index").css("color", "red");
+				}
+			});
+
+			// $(".uvIndex").html(
+			// 	`<p class="small text-center">${uvIndex}<br>UV Index</p>`
+			// );
 		});
 	});
-	// });
 
 	// ———————————————————————— //
 	// —— END Document Ready —— //

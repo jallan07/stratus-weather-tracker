@@ -144,13 +144,19 @@
 							style="max-width: 30rem"
 						>
 							<div class="card-header text-center"><span>Today</span></div>
+							<!-- card main row -->
 							<div class="card-body row">
 								<div
 									class="card-text col-xs-7 mx-auto my-auto current-weather"
 								></div>
 								<div class="current-icon my-auto mx-auto col-xs-5"></div>
 							</div>
-							<div class="card-body row"></div>
+							<!-- Card footer row -->
+							<div class="card-body row my-3">
+								<div class="humidity my-auto mx-auto col-xs-4"></div>
+								<div class="wind my-auto mx-auto col-xs-4"></div>
+								<div class="uv-index my-auto mx-auto col-xs-4"></div>
+							</div>
 						</div>
 					</div>
 					<div class="col-sm-6 col-md-4 d-flex">
@@ -243,6 +249,6 @@
 		></script>
 		<!-- Main scripts -->
 		<script src="scripts/today.js"></script>
-		<script src="scripts/weather.js"></script>
+		<script src="scripts/search.js"></script>
 	</body>
 </html>
