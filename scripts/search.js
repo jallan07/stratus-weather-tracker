@@ -102,12 +102,8 @@ $(document).ready(function () {
 				method: "GET",
 			}).then(function (forecast) {
 				console.log(forecast);
-				// data comes back with a daily array within the parent object. This daily array begins with the (today) at the 0 index, so for the forecast, I need to start grabbing data from the 1 index and beyond.
 
-				//define the uv index variable
-				var uvIndex = forecast.current.uvi.toFixed(0);
-
-				// print the uv index to the dom
+				// print the uv index for the current day to the dom
 				$(".uv-index").html(
 					`<h6 class="text-center">${uvIndex}<br><span class="small">UV Index</span></h6>`
 				);
@@ -123,10 +119,55 @@ $(document).ready(function () {
 					$(".uv-index").css("color", "red");
 				}
 
-				// unhide the corresponding elements once all data has been retreived from the api
-				$(".weather-row").removeClass("d-none");
-				$("#recent-searches").removeClass("d-none");
-				$("#icon-list").removeClass("d-none");
+				//define the uv index variable
+				var uvIndex = forecast.current.uvi.toFixed(0);
+
+				// data comes back with a daily array within the parent object. This daily array begins with the (today) at the 0 index, so for the forecast, I need to start grabbing data from the 1 index and beyond.
+
+				// ———————— DYNAMICALLY CREATE THE FIRST TWO FORECAST BLOCKS ON THE FIRST ROW ———————— //
+				// set count = 1 so that we can use this to increment our forecast day count
+				var row_1_count = 1;
+				for (var i = 0; i < 5; i++) {
+					// create the main card container
+					var cardContainer = $(
+						`<div class="col-sm-6 col-md-4 d-flex card-container">`
+					);
+
+					// create the card itself
+					var card = $(
+						`<div class="card border-success mb-3 mx-auto flex-fill today-weather" style="max-width: 30rem">`
+					);
+
+					// create the card header
+					var cardHeader = $(`<div class="card-header text-center"><span>`);
+
+					// get today's date
+					var getDate = new Date();
+					// convert today's date to a string
+					var date = getDate.toDateString();
+					// split today's date
+					var dateArr = date.split(" ");
+					// grab the day number from the date and convert it back to an integer
+					var dayNum = +dateArr[2];
+					// set the day number equal to the day + the current count
+					dayNum = dayNum + row_1_count;
+					// set the day variable so that it reads like Sep 24, 2020
+					var day = dateArr[1] + " " + dayNum + ", " + dateArr[3];
+
+					// print the date elements to the dom
+					cardHeader.text(day);
+					card.append(cardHeader);
+					cardContainer.append(card);
+					$(".weather-row-1").append(cardContainer);
+
+					// increment the count by 1 so next time we come through the dates are correct
+					row_1_count++;
+
+					// unhide the corresponding elements once all data has been retreived from the api
+					$(".weather-row-1").removeClass("d-none");
+					$("#recent-searches").removeClass("d-none");
+					$("#icon-list").removeClass("d-none");
+				}
 			});
 		});
 	});

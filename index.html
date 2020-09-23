@@ -144,7 +144,9 @@
 			</section>
 			<!-- Weather Blocks -->
 			<section>
-				<div class="row mt-4 weather-row d-none">
+				<!-- Row 1 - Weather Blocks -->
+				<div class="row mt-4 weather-row-1 d-none">
+					<!-- Today/Current -->
 					<div class="col-sm-6 col-md-4 d-flex">
 						<div
 							class="card border-success mb-3 mx-auto flex-fill today-weather"
@@ -166,70 +168,81 @@
 							</div>
 						</div>
 					</div>
+					<!-- Day 1 Forecast -->
+					
+					<!-- Day 2 Forecase -->
+					
+				<!-- Row 2 - Weather Blocks -->
+				<div class="row mt-4 weather-row d-none">
+					<!-- Today/Current -->
 					<div class="col-sm-6 col-md-4 d-flex">
 						<div
-							class="card border-success mb-3 mx-auto flex-fill"
+							class="card border-success mb-3 mx-auto flex-fill today-weather"
 							style="max-width: 30rem"
 						>
 							<div class="card-header text-center">
-								<span>Forecast Day 1</span>
+								<span>Day 3 Forecast</span>
 							</div>
-							<div class="card-body">
-								<p class="card-text"></p>
+							<!-- card main row -->
+							<div class="card-body row">
+								<div
+									class="card-text col-xs-7 mx-auto my-auto current-weather"
+								></div>
+								<div class="current-icon my-auto mx-auto col-xs-5"></div>
+							</div>
+							<!-- Card footer row -->
+							<div class="card-body row my-3">
+								<div class="humidity my-auto mx-auto col-xs-4"></div>
+								<div class="wind my-auto mx-auto col-xs-4"></div>
+								<div class="uv-index my-auto mx-auto col-xs-4"></div>
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-6 col-md-4 d-flex">
+					<!-- Day 1 Forecast -->
+					<div class="col-sm-6 col-md-4 d-flex card-container">
 						<div
-							class="card border-success mb-3 mx-auto flex-fill"
+							class="card border-success mb-3 mx-auto flex-fill today-weather"
 							style="max-width: 30rem"
 						>
 							<div class="card-header text-center">
-								<span>Forecast Day 2</span>
+								<span>Day 4 Forecast</span>
 							</div>
-							<div class="card-body">
-								<p class="card-text"></p>
+							<!-- card main row -->
+							<div class="card-body row">
+								<div
+									class="card-text col-xs-7 mx-auto my-auto current-weather"
+								></div>
+								<div class="current-icon my-auto mx-auto col-xs-5"></div>
+							</div>
+							<!-- Card footer row -->
+							<div class="card-body row my-3">
+								<div class="humidity my-auto mx-auto col-xs-4"></div>
+								<div class="wind my-auto mx-auto col-xs-4"></div>
+								<div class="uv-index my-auto mx-auto col-xs-4"></div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row mb-5 weather-row d-none">
+					<!-- Day 2 Forecase -->
 					<div class="col-sm-6 col-md-4 d-flex">
 						<div
-							class="card border-success mb-3 mx-auto flex-fill"
+							class="card border-success mb-3 mx-auto flex-fill today-weather"
 							style="max-width: 30rem"
 						>
 							<div class="card-header text-center">
-								<span>Forecast Day 3</span>
+								<span>Day 5 Forecast</span>
 							</div>
-							<div class="card-body">
-								<p class="card-text"></p>
+							<!-- card main row -->
+							<div class="card-body row">
+								<div
+									class="card-text col-xs-7 mx-auto my-auto current-weather"
+								></div>
+								<div class="current-icon my-auto mx-auto col-xs-5"></div>
 							</div>
-						</div>
-					</div>
-					<div class="col-sm-6 col-md-4 d-flex">
-						<div
-							class="card border-success mb-3 mx-auto flex-fill"
-							style="max-width: 30rem"
-						>
-							<div class="card-header text-center">
-								<span>Forecast Day 4</span>
-							</div>
-							<div class="card-body">
-								<p class="card-text"></p>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-6 col-md-4 d-flex">
-						<div
-							class="card border-success mb-3 mx-auto flex-fill"
-							style="max-width: 30rem"
-						>
-							<div class="card-header text-center">
-								<span>Forecast Day 5</span>
-							</div>
-							<div class="card-body">
-								<p class="card-text"></p>
+							<!-- Card footer row -->
+							<div class="card-body row my-3">
+								<div class="humidity my-auto mx-auto col-xs-4"></div>
+								<div class="wind my-auto mx-auto col-xs-4"></div>
+								<div class="uv-index my-auto mx-auto col-xs-4"></div>
 							</div>
 						</div>
 					</div>
@@ -237,7 +250,7 @@
 			</section>
 			<!-- End Weather Blocks -->
 
-			<section class="container row mx-auto d-none" id="icon-list">
+			<section class="container row my-5 mx-auto d-none" id="icon-list">
 				<h5 class="mx-auto mb-4">Icon list from OpenWeather</h5>
 				<table class="table table-bordered table-fluid">
 					<tbody>
@@ -421,8 +434,10 @@
 				</table>
 			</section>
 
+			<hr class="footer-hr mt-5" />
+
 			<footer>
-				<div class="row my-5">
+				<div class="row my-4">
 					<div class="col-xs-8 mx-auto">
 						<h6 class="text-center">
 							Data pulled directly from the
@@ -434,7 +449,7 @@
 						<h6 class="text-center">
 							Created by
 							<a href="https://joshallan.dev" target="_blank"
-								>Josh Allan | Dev</a
+								>Josh Allan | Dev.</a
 							>
 						</h6>
 					</div>

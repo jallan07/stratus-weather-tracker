@@ -2,6 +2,15 @@ header {
 	background-color: #303030;
 }
 
+.footer-hr {
+	width: 250px;
+	background-color: #ffffff58;
+}
+
+footer h6 {
+	color: #ffffff58 !important;
+}
+
 .navbar {
 	width: 80%;
 	margin: 0 auto;
