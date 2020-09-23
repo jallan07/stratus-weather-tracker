@@ -122,7 +122,7 @@ $(document).ready(function () {
 			});
 
 			// Create a variable to store our forecast query which we will use in the tertiary api call that pulls in a forecast response from openweathermap
-			var forecastQueryURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&appid=${apiKey}`;
+			var forecastQueryURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&units=imperial&appid=${apiKey}`;
 
 			// run a secondary api call to grab the forecast
 			$.ajax({
@@ -131,10 +131,6 @@ $(document).ready(function () {
 			}).then(function (forecast) {
 				console.log(forecast);
 			});
-
-			// $(".uvIndex").html(
-			// 	`<p class="small text-center">${uvIndex}<br>UV Index</p>`
-			// );
 		});
 	});
 
