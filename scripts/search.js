@@ -23,8 +23,6 @@ $(document).ready(function () {
 		} else {
 			city = $(".city-search").val();
 			state = $(".state-search").val();
-			$("#recent-searches").removeClass("d-none");
-			$("#icon-list").removeClass("d-none");
 		}
 
 		var apiKey = "63f6253feb7c1af59a49c4232d8efc07";
@@ -124,6 +122,11 @@ $(document).ready(function () {
 				if (uvIndex > 6) {
 					$(".uv-index").css("color", "red");
 				}
+
+				// unhide the corresponding elements once all data has been retreived from the api
+				$(".weather-row").removeClass("d-none");
+				$("#recent-searches").removeClass("d-none");
+				$("#icon-list").removeClass("d-none");
 			});
 		});
 	});
