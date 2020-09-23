@@ -100,7 +100,6 @@ $(document).ready(function () {
 				url: `https://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${apiKey}`,
 				method: "GET",
 			}).then(function (uvIndexCall) {
-				console.log(uvIndexCall);
 				//define the uv index variable
 				var uvIndex = uvIndexCall.value.toFixed(0);
 
@@ -121,15 +120,16 @@ $(document).ready(function () {
 				}
 			});
 
-			// Create a variable to store our forecast query which we will use in the tertiary api call that pulls in a forecast response from openweathermap
-			var forecastQueryURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&units=imperial&appid=${apiKey}`;
+			// Create a variable to store our forecast query which we will use in the tertiary api call that pulls in a forecast response from openweathermap. Filters out any minutely, hourly, or alert data from the response object
+			var forecastQueryURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=imperial&appid=${apiKey}`;
 
-			// run a secondary api call to grab the forecast
+			// run another secondary api call to grab the forecast
 			$.ajax({
 				url: forecastQueryURL,
 				method: "GET",
 			}).then(function (forecast) {
 				console.log(forecast);
+				// data comes back with a daily array within the parent object. This daily array begins with the (today) at the 0 index, so for the forecast, I need to start grabbing data from the 1 index and beyond.
 			});
 		});
 	});
