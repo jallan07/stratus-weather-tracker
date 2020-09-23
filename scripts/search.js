@@ -6,8 +6,6 @@ $(document).ready(function () {
 	// initialize city and state variables
 	var city;
 	var state;
-	var weather;
-	var temp;
 
 	// collect user input from the search form in the main header, and pass that information into the city and state variables above
 	$(".submit").on("click", function (e) {
@@ -95,13 +93,19 @@ $(document).ready(function () {
 			var lat = response.coord.lat;
 			var lon = response.coord.lon;
 
-			// run a secondary api call to grab the uv index
+			// Create a variable to store our forecast query which we will use in the tertiary api call that pulls in a forecast response from openweathermap. Filters out any minutely, hourly, or alert data from the response object
+			var forecastQueryURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=imperial&appid=${apiKey}`;
+
+			// run another secondary api call to grab the forecast
 			$.ajax({
-				url: `https://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${apiKey}`,
+				url: forecastQueryURL,
 				method: "GET",
-			}).then(function (uvIndexCall) {
+			}).then(function (forecast) {
+				console.log(forecast);
+				// data comes back with a daily array within the parent object. This daily array begins with the (today) at the 0 index, so for the forecast, I need to start grabbing data from the 1 index and beyond.
+
 				//define the uv index variable
-				var uvIndex = uvIndexCall.value.toFixed(0);
+				var uvIndex = forecast.current.uvi.toFixed(0);
 
 				// print the uv index to the dom
 				$(".uv-index").html(
@@ -118,18 +122,6 @@ $(document).ready(function () {
 				if (uvIndex > 6) {
 					$(".uv-index").css("color", "red");
 				}
-			});
-
-			// Create a variable to store our forecast query which we will use in the tertiary api call that pulls in a forecast response from openweathermap. Filters out any minutely, hourly, or alert data from the response object
-			var forecastQueryURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=imperial&appid=${apiKey}`;
-
-			// run another secondary api call to grab the forecast
-			$.ajax({
-				url: forecastQueryURL,
-				method: "GET",
-			}).then(function (forecast) {
-				console.log(forecast);
-				// data comes back with a daily array within the parent object. This daily array begins with the (today) at the 0 index, so for the forecast, I need to start grabbing data from the 1 index and beyond.
 			});
 		});
 	});
