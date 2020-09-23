@@ -7,8 +7,7 @@ $(document).ready(function () {
 	var city;
 	var state;
 	var weather;
-	var tempF;
-	var tempK;
+	var temp;
 
 	// collect user input from the search form in the main header, and pass that information into the city and state variables above
 	$(".submit").on("click", function (e) {
@@ -29,7 +28,7 @@ $(document).ready(function () {
 		}
 
 		var apiKey = "63f6253feb7c1af59a49c4232d8efc07";
-		var queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${city},${state}&appid=${apiKey}`;
+		var queryURL = `https://api.openweathermap.org/data/2.5/weather?units=imperial&q=${city},${state}&appid=${apiKey}`;
 
 		$.ajax({
 			url: queryURL,
@@ -54,28 +53,26 @@ $(document).ready(function () {
 			);
 
 			// collect the temperature from the api response
-			var tempK = response.main.temp;
-			// convert the temperature from the api response to Fahrenheit
-			var tempF = ((tempK - 273.15) * 1.8 + 32).toFixed(0);
+			var temp = response.main.temp.toFixed(0);
 
 			// print the current temperature to the dom
 			$(".current-weather").html(
-				`<h4 class="temp-num text-center">${tempF}°F </h4>
+				`<h4 class="temp-num text-center">${temp}°F </h4>
 				<h6>${desc}<span class="small ml-2">(current)</span></h6>`
 			);
 
 			// dynamically change the color of the weather block borders based on temp
-			if (tempF <= 50) {
+			if (temp <= 50) {
 				$(".today-weather").removeClass("border-warning");
 				$(".today-weather").removeClass("border-danger");
 				$(".today-weather").addClass("border-info");
 			}
-			if (tempF > 50 && tempF <= 79) {
+			if (temp > 50 && temp <= 79) {
 				$(".today-weather").removeClass("border-info");
 				$(".today-weather").removeClass("border-danger");
 				$(".today-weather").addClass("border-warning");
 			}
-			if (tempF > 79) {
+			if (temp > 79) {
 				$(".today-weather").removeClass("border-info");
 				$(".today-weather").removeClass("border-warning");
 				$(".today-weather").addClass("border-danger");
@@ -90,7 +87,7 @@ $(document).ready(function () {
 				`<h6 class="text-center">${humidity}%<br><span class="small">Humidity</span></h6>`
 			);
 			$(".wind").html(
-				`<h6 class="text-center">${wind} m/sec<br><span class="small">Wind Speed</span></h6>`
+				`<h6 class="text-center">${wind} mph<br><span class="small">Wind Speed</span></h6>`
 			);
 
 			// define lat lon coordinate variables so that we can pull the uv index with a secondary api call
