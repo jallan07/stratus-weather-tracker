@@ -23,6 +23,7 @@ $(document).ready(function () {
 		} else {
 			city = $(".city-search").val();
 			state = $(".state-search").val();
+			$("#recent-searches").removeClass("d-none");
 			$("#icon-list").removeClass("d-none");
 		}
 
