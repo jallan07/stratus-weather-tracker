@@ -29,6 +29,7 @@ $(document).ready(function () {
 
 		var apiKey = "63f6253feb7c1af59a49c4232d8efc07";
 		var queryURL = `https://api.openweathermap.org/data/2.5/weather?units=imperial&q=${city},${state}&appid=${apiKey}`;
+		console.log(queryURL);
 
 		$.ajax({
 			url: queryURL,
@@ -118,6 +119,17 @@ $(document).ready(function () {
 				if (uvIndex > 6) {
 					$(".uv-index").css("color", "red");
 				}
+			});
+
+			// Create a variable to store our forecast query which we will use in the tertiary api call that pulls in a forecast response from openweathermap
+			var forecastQueryURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&appid=${apiKey}`;
+
+			// run a secondary api call to grab the forecast
+			$.ajax({
+				url: forecastQueryURL,
+				method: "GET",
+			}).then(function (forecast) {
+				console.log(forecast);
 			});
 
 			// $(".uvIndex").html(
