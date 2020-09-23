@@ -23,6 +23,7 @@ $(document).ready(function () {
 		} else {
 			city = $(".city-search").val();
 			state = $(".state-search").val();
+			$("#icon-list").removeClass("d-none");
 		}
 
 		var apiKey = "63f6253feb7c1af59a49c4232d8efc07";
