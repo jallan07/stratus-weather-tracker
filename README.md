@@ -1,6 +1,6 @@
-# 06 Server-Side APIs: Weather Dashboard
+# Stratus Weather Dashboard
 
-In this project, I built a weather dashboard that runs in the browser. By calling and retreiving data from OpenWeather's one-call API, I was able to build a dynamic dashboard that updates automatically as new searches are entered by the user.
+In this project, I built a weather dashboard that runs in the browser. By calling and retreiving data from OpenWeather's one-call API, I was able to build a dynamic dashboard that updates automatically as new searches are entered by the user. Border colors update based on the temperature for that day. UV Index colors also change based on the value of that number.
 
 ## Resources Used
 
@@ -35,6 +35,13 @@ WHEN I open the weather dashboard
 THEN I am presented with the last searched city forecast
 ```
 
+## screenshots
+
+![Stratus - Home](assets/stratus-main.png)
+![Stratus - Search](assets/stratus-search-1.png)
+![Stratus - Search w/ Recent Searches](assets/stratus-search-2.png)
+![Stratus - Home w/ Recent Searches](assets/stratus-main-2.png)
+
 ---
 
-# stratus-weather-tracker
+### Created by Josh Allan | Dev
