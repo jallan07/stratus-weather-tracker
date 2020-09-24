@@ -17,7 +17,7 @@ I WANT to see the weather outlook for multiple cities
 SO THAT I can plan a trip accordingly
 ```
 
-## Acceptance Criteria
+## Project Criteria
 
 ```
 GIVEN a weather dashboard with form inputs
