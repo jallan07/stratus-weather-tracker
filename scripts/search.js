@@ -27,7 +27,6 @@ $(document).ready(function () {
 
 		var apiKey = "63f6253feb7c1af59a49c4232d8efc07";
 		var queryURL = `https://api.openweathermap.org/data/2.5/weather?units=imperial&q=${city},${state}&appid=${apiKey}`;
-		console.log(queryURL);
 
 		$.ajax({
 			url: queryURL,
@@ -103,10 +102,9 @@ $(document).ready(function () {
 			}).then(function (forecast) {
 				console.log(forecast);
 
-				// print the uv index for the current day to the dom
-				$(".uv-index").html(
-					`<h6 class="text-center">${uvIndex}<br><span class="small">UV Index</span></h6>`
-				);
+				// define the uv index variable
+				var uvIndex = +forecast.current.uvi.toFixed(0);
+				console.log(uvIndex);
 
 				// dynamically update the uv index color based on rating
 				if (uvIndex < 4) {
@@ -119,14 +117,19 @@ $(document).ready(function () {
 					$(".uv-index").css("color", "red");
 				}
 
-				//define the uv index variable
-				var uvIndex = forecast.current.uvi.toFixed(0);
-
+				// print the uv index for the current day to the dom
+				$(".uv-index").html(
+					`<h6 class="text-center">${uvIndex}<br><span class="small">UV Index</span></h6>`
+				);
+				// ———————————————————— //
+				// ———————————————————— //
 				// data comes back with a daily array within the parent object. This daily array begins with the (today) at the 0 index, so for the forecast, I need to start grabbing data from the 1 index and beyond.
+				// ———————————————————— //
+				// ———————————————————— //
 
-				// ———————— DYNAMICALLY CREATE THE FIRST TWO FORECAST BLOCKS ON THE FIRST ROW ———————— //
 				// set count = 1 so that we can use this to increment our forecast day count
-				var row_1_count = 1;
+				var count = 1;
+				// ———————— DYNAMICALLY CREATE THE FORECAST BLOCKS ———————— //
 				for (var i = 0; i < 5; i++) {
 					// create the main card container
 					var cardContainer = $(
@@ -134,7 +137,7 @@ $(document).ready(function () {
 					);
 
 					// create the card itself
-					var card = $(
+					var cardDiv = $(
 						`<div class="card border-success mb-3 mx-auto flex-fill today-weather" style="max-width: 30rem">`
 					);
 
@@ -150,18 +153,51 @@ $(document).ready(function () {
 					// grab the day number from the date and convert it back to an integer
 					var dayNum = +dateArr[2];
 					// set the day number equal to the day + the current count
-					dayNum = dayNum + row_1_count;
+					dayNum = dayNum + count;
 					// set the day variable so that it reads like Sep 24, 2020
 					var day = dateArr[1] + " " + dayNum + ", " + dateArr[3];
 
 					// print the date elements to the dom
 					cardHeader.text(day);
-					card.append(cardHeader);
-					cardContainer.append(card);
+					cardDiv.append(cardHeader);
+					cardContainer.append(cardDiv);
 					$(".weather-row-1").append(cardContainer);
 
+					// Create the body elements
+					var cardBodyDiv = $(`<div class="card-body row">`);
+
+					var cardTempDiv = $(`<div
+					class="card-text col-xs-7 mx-auto my-auto current-weather">`);
+
+					var cardIconDiv = $(
+						`<div class="current-icon my-auto mx-auto col-xs-5">`
+					);
+
+					var cardFooterDiv = $(`<div class="card-body row my-3">`);
+
+					var cardhumidityDiv = $(
+						`<div class="humidity my-auto mx-auto col-xs-4">`
+					);
+
+					var cardWindDiv = $(`<div class="wind my-auto mx-auto col-xs-4">`);
+					cardWindDiv.html(
+						`<h6 class="text-center">${forecast.daily[i].wind_speed} mph<br><span class="small">Wind Speed</span></h6>`
+					);
+					cardFooterDiv.append(cardWindDiv);
+
+					// uv index
+					var cardUvDiv = $(`<div class="uv-index my-auto mx-auto col-xs-4">`);
+					cardUvDiv.html(
+						`<h6 class="text-center">${forecast.daily[i].uvi.toFixed(
+							0
+						)}<br><span class="small">UV Index</span></h6>`
+					);
+					cardFooterDiv.append(cardUvDiv);
+
+					cardDiv.append(cardFooterDiv);
+
 					// increment the count by 1 so next time we come through the dates are correct
-					row_1_count++;
+					count++;
 
 					// unhide the corresponding elements once all data has been retreived from the api
 					$(".weather-row-1").removeClass("d-none");
