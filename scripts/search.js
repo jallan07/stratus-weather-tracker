@@ -7,51 +7,72 @@ $(document).ready(function () {
 	var city;
 	var state;
 
+	renderBtns();
+
 	function saveSearch(cityData, stateData) {
+		// get local storage items
 		var currentData = JSON.parse(localStorage.getItem("saved-searches")) || [];
+		// create a new object with the incoming searches
 		var dataObj = {
 			city: cityData,
 			state: stateData,
 		};
-		currentData.push(dataObj);
+		// add the new search data to the front of the array
+		currentData.unshift(dataObj);
+		// show only the 10 most recent searches
 		currentData = currentData.slice(0, 10);
+		// set the new currentData object to local storage
 		localStorage.setItem("saved-searches", JSON.stringify(currentData));
 	}
 
-	// collect user input from the search form in the main header, and pass that information into the city and state variables above
-
+	// the function that will create buttons for each recent search
 	function renderBtns() {
+		// get local storage
 		var currentData = JSON.parse(localStorage.getItem("saved-searches")) || [];
+		// the main for loop which will parse through the object and create buttons for each search
 		for (var i = 0; i < currentData.length; i++) {
+			// create variables that match up with the dataObj key/value pairs
 			let city = currentData[i].city;
 			let state = currentData[i].state;
+			// append the new recent search buttons to the proper div
 			$("#saved-searches").append(
 				`<button class="btn btn-secondary mx-1 my-1 saved-button">${city}, ${state}</button>`
 			);
 		}
 	}
 
+	// click function for each of the recent searches buttons
 	$(document).on("click", ".saved-button", function () {
+		// set the button value to the text of the button
 		let value = $(this).text();
+		// split the text at the comma/space
 		value = value.split(", ");
+		// set the new city variable to the 0 index in the value array
 		city = value[0];
+		// set the new city variable to the 1 index in the value array
 		state = value[1];
+		// pass the new city/state variables into the search weather function on button click
 		searchWeather(city, state);
 	});
 
+	// collect user input from the search form in the main header, and pass that information into the city and state variables above
 	$(".submit").on("click", function (e) {
 		$("#saved-searches").empty();
+		renderBtns();
 		e.preventDefault();
 		city = $(".city-search").val();
 		state = $(".state-search").val();
 		searchWeather(city, state);
-		renderBtns();
 	});
 
+	// the main search function
 	function searchWeather(city, state) {
-		// Will need to use the following code in order to clear the blocks as each new search is made -- but first need to create the js code that will dynamically create the current weather card
-		// $(".weather-row-1").empty();
+		$("#saved-searches").empty();
+		renderBtns();
+		// clear the blocks as each new search is made
+		$(".weather-row-1").empty();
 
+		// only allow searches when both a city and state is entered
 		if (city === "") {
 			alert("You must enter both a city AND a state name to continue.");
 			return;
@@ -70,60 +91,6 @@ $(document).ready(function () {
 			method: "GET",
 		}).then(function (response) {
 			console.log(response);
-			// create and populate an h2 heading
-			var cityHeading = $(".city-heading");
-			cityHeading.html(
-				`<p class="text-center mx-auto">Weather in <span class="underline">${response.name}, ${state}</span></p>`
-			);
-			cityHeading.css("color", "white");
-
-			// pull in the icon from openweather and populate in the current weather field
-			var currentIconCode = response.weather[0].icon;
-			var currentIconURL = `http://openweathermap.org/img/wn/${currentIconCode}@2x.png`;
-			var desc = response.weather[0].main;
-
-			// print the current weather icon and description to the dom
-			$(".current-icon").html(
-				`<img class="weather-icon" src="${currentIconURL}"><br>`
-			);
-
-			// collect the temperature from the api response
-			var temp = response.main.temp.toFixed(0);
-
-			// print the current temperature to the dom
-			$(".current-weather").html(
-				`<h4 class="temp-num text-center">${temp}°F </h4>
-				<h6>${desc}<span class="small ml-2">(current)</span></h6>`
-			);
-
-			// dynamically change the color of the weather block borders based on temp
-			if (temp <= 50) {
-				$(".today-weather").removeClass("border-warning");
-				$(".today-weather").removeClass("border-danger");
-				$(".today-weather").addClass("border-info");
-			}
-			if (temp > 50 && temp <= 79) {
-				$(".today-weather").removeClass("border-info");
-				$(".today-weather").removeClass("border-danger");
-				$(".today-weather").addClass("border-warning");
-			}
-			if (temp > 79) {
-				$(".today-weather").removeClass("border-info");
-				$(".today-weather").removeClass("border-warning");
-				$(".today-weather").addClass("border-danger");
-			}
-
-			// define variables for high/low, humidity, wind, and ux index
-			var humidity = response.main.humidity;
-			var wind = response.wind.speed;
-			// var uvIndex = response.wind.speed;
-
-			$(".humidity").html(
-				`<h6 class="text-center">${humidity}%<br><span class="small">Humidity</span></h6>`
-			);
-			$(".wind").html(
-				`<h6 class="text-center">${wind} mph<br><span class="small">Wind Speed</span></h6>`
-			);
 
 			// define lat lon coordinate variables so that we can pull the uv index with a secondary api call
 			var lat = response.coord.lat;
@@ -139,25 +106,147 @@ $(document).ready(function () {
 			}).then(function (forecast) {
 				console.log(forecast);
 
-				// define the uv index variable
+				// ————————————————————————————————————————————— //
+				// ————————————————————————————————————————————— //
+				// NEW DYNAMIC FUNCTION FOR CURRENT WEATHER CARD //
+				// ————————————————————————————————————————————— //
+				// ————————————————————————————————————————————— //
+
+				// create and populate an h2 heading
+				var cityHeading = $(".city-heading");
+				cityHeading.html(
+					`<p class="text-center mx-auto">Weather in <span class="underline">${response.name}, ${state}</span></p>`
+				);
+				cityHeading.css("color", "white");
+				// create the main card container
+				var currentCardContainer = $(
+					`<div class="col-sm-6 col-md-4 d-flex card-container">`
+				);
+				// create the card itself
+				var currentCardDiv = $(
+					`<div class="card border-success mb-3 mx-auto flex-fill today-weather" style="max-width: 30rem">`
+				);
+				// ——————————————————————— //
+				// create the card header
+				var currentCardHeader = $(
+					`<div class="card-header text-center"><span>`
+				);
+
+				// ——————————————————————— //
+				// print the date elements to the dom
+				currentCardHeader.text("Current Weather");
+				currentCardDiv.append(currentCardHeader);
+				currentCardContainer.append(currentCardDiv);
+				$(".weather-row-1").append(currentCardContainer);
+
+				// ——————————————————————— //
+				// Create the card elements
+				var currentCardBodyDiv = $(`<div class="card-body row">`);
+				var currentCardTempDiv = $(`<div
+					class="card-text col-xs-7 mx-auto my-auto current-weather">`);
+
+				// pull in the icon from openweather and populate in the current weather field
+				var currentIconCode = response.weather[0].icon;
+				var currentIconURL = `http://openweathermap.org/img/wn/${currentIconCode}@2x.png`;
+				var desc = forecast.current.weather[0].description;
+
+				// ——————————————————————— //
+				// collect the temperature from the api response
+				var temp = response.main.temp.toFixed(0);
+				// print the current temperature to the dom
+				$(currentCardTempDiv).html(
+					`<h4 class="temp-num text-center">${temp}°F </h4>
+				<h6>${desc}<span class="small ml-2">(current)</span></h6>`
+				);
+				// dynamically change the color of the weather block borders based on temp
+				if (temp <= 50) {
+					$(".today-weather").removeClass("border-warning");
+					$(".today-weather").removeClass("border-danger");
+					$(".today-weather").addClass("border-info");
+				}
+				if (temp > 50 && temp <= 79) {
+					$(".today-weather").removeClass("border-info");
+					$(".today-weather").removeClass("border-danger");
+					$(".today-weather").addClass("border-warning");
+				}
+				if (temp > 79) {
+					$(".today-weather").removeClass("border-info");
+					$(".today-weather").removeClass("border-warning");
+					$(".today-weather").addClass("border-danger");
+				}
+				// append the temp div to the body
+				currentCardBodyDiv.append(currentCardTempDiv);
+
+				// ——————————————————————— //
+				// weather icon
+				var currentIcon = forecast.current.weather[0].icon;
+				var currentIconURL = `http://openweathermap.org/img/wn/${currentIcon}@2x.png`;
+				var currentCardIconDiv = $(
+					`<div class="current-icon my-auto mx-auto col-xs-5">`
+				);
+				currentCardIconDiv.html(
+					`<img class="weather-icon" src="${currentIconURL}"><br>`
+				);
+				// append the icon div to the card body
+				currentCardBodyDiv.append(currentCardIconDiv);
+
+				// ——————————————————————— //
+				// Add footer elements below
+				// ——————————————————————— //
+				var currentCardFooterDiv = $(`<div class="card-body row my-3">`);
+
+				// humidity
+				var currentCardhumidityDiv = $(
+					`<div class="wind my-auto mx-auto col-xs-4">`
+				);
+				currentCardhumidityDiv.html(
+					`<h6 class="text-center">${forecast.current.humidity}%<br><span class="small">Humidity</span></h6>`
+				);
+				currentCardFooterDiv.append(currentCardhumidityDiv);
+
+				// ——————————————————————— //
+				// wind speed
+				var currentCardWindDiv = $(
+					`<div class="wind my-auto mx-auto col-xs-4">`
+				);
+				currentCardWindDiv.html(
+					`<h6 class="text-center">${forecast.current.wind_speed} mph<br><span class="small">Wind Speed</span></h6>`
+				);
+				currentCardFooterDiv.append(currentCardWindDiv);
+
+				// ——————————————————————— //
+				// uv index
 				var uvIndex = +forecast.current.uvi.toFixed(0);
-				console.log(uvIndex);
-
-				// dynamically update the uv index color based on rating
-				if (uvIndex < 4) {
-					$(".uv-index").css("color", "green");
-				}
-				if (uvIndex >= 4 || uvIndex <= 6) {
-					$(".uv-index").css("color", "yellow");
-				}
-				if (uvIndex > 6) {
-					$(".uv-index").css("color", "red");
-				}
-
-				// print the uv index for the current day to the dom
-				$(".uv-index").html(
+				var currentCardUvDiv = $(
+					`<div class="uv-index my-auto mx-auto col-xs-4">`
+				);
+				currentCardUvDiv.html(
 					`<h6 class="text-center">${uvIndex}<br><span class="small">UV Index</span></h6>`
 				);
+				// dynamically update the uv index color based on rating
+				if (uvIndex < 4) {
+					currentCardUvDiv.css("color", "green");
+				}
+				if (uvIndex >= 4 || uvIndex <= 6) {
+					currentCardUvDiv.css("color", "yellow");
+				}
+				if (uvIndex > 6) {
+					currentCardUvDiv.css("color", "red");
+				}
+				currentCardFooterDiv.append(currentCardUvDiv);
+
+				// ——————————————————————— //
+				// ——————————————————————— //
+				// append the card elements to the container
+				currentCardDiv.append(currentCardBodyDiv);
+				currentCardDiv.append(currentCardFooterDiv);
+
+				// ————————————————————————————————————————————— //
+				// ————————————————————————————————————————————— //
+				// END DYNAMIC FUNCTION FOR CURRENT WEATHER CARD //
+				// ————————————————————————————————————————————— //
+				// ————————————————————————————————————————————— //
+
 				// ———————————————————— //
 				// ———————————————————— //
 				// data comes back with a daily array within the parent object. This daily array begins with the (today) at the 0 index, so for the forecast, I need to start grabbing data from the 1 index and beyond.
