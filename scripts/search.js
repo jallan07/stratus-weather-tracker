@@ -141,50 +141,75 @@ $(document).ready(function () {
 						`<div class="card border-success mb-3 mx-auto flex-fill today-weather" style="max-width: 30rem">`
 					);
 
+					// ——————————————————————— //
 					// create the card header
 					var cardHeader = $(`<div class="card-header text-center"><span>`);
 
+					// ——————————————————————— //
 					// get today's date
 					var getDate = new Date();
 					// convert today's date to a string
 					var date = getDate.toDateString();
 					// split today's date
 					var dateArr = date.split(" ");
-					// grab the day number from the date and convert it back to an integer
-					var dayNum = +dateArr[2];
 					// set the day number equal to the day + the current count
-					dayNum = dayNum + count;
+					dayNum = moment().add(count, "days").date();
 					// set the day variable so that it reads like Sep 24, 2020
 					var day = dateArr[1] + " " + dayNum + ", " + dateArr[3];
 
+					// ——————————————————————— //
 					// print the date elements to the dom
 					cardHeader.text(day);
 					cardDiv.append(cardHeader);
 					cardContainer.append(cardDiv);
 					$(".weather-row-1").append(cardContainer);
 
-					// Create the body elements
+					// ——————————————————————— //
+					// Create the card elements
 					var cardBodyDiv = $(`<div class="card-body row">`);
-
 					var cardTempDiv = $(`<div
 					class="card-text col-xs-7 mx-auto my-auto current-weather">`);
+
+					// ——————————————————————— //
+					// temperature/description
+					var maxTemp = forecast.daily[i].max;
+					var minTemp = forecast.daily[i].min;
+					var forecastDesc = forecast.daily[i].weather.description;
+
+					// ——————————————————————— //
+					// weather icon
+					var icon = forecast.daily[i].weather[0].icon;
+					var iconURL = `http://openweathermap.org/img/wn/${icon}@2x.png`;
 
 					var cardIconDiv = $(
 						`<div class="current-icon my-auto mx-auto col-xs-5">`
 					);
+					cardIconDiv.html(`<img class="weather-icon" src="${iconURL}"><br>`);
+					cardBodyDiv.append(cardIconDiv);
 
+					// ——————————————————————— //
+					// Add footer elements below
+					// ——————————————————————— //
 					var cardFooterDiv = $(`<div class="card-body row my-3">`);
-
+					// ——————————————————————— //
+					// humidity
 					var cardhumidityDiv = $(
-						`<div class="humidity my-auto mx-auto col-xs-4">`
+						`<div class="wind my-auto mx-auto col-xs-4">`
 					);
+					cardhumidityDiv.html(
+						`<h6 class="text-center">${forecast.daily[i].humidity}%<br><span class="small">Humidity</span></h6>`
+					);
+					cardFooterDiv.append(cardhumidityDiv);
 
+					// ——————————————————————— //
+					// wind speed
 					var cardWindDiv = $(`<div class="wind my-auto mx-auto col-xs-4">`);
 					cardWindDiv.html(
 						`<h6 class="text-center">${forecast.daily[i].wind_speed} mph<br><span class="small">Wind Speed</span></h6>`
 					);
 					cardFooterDiv.append(cardWindDiv);
 
+					// ——————————————————————— //
 					// uv index
 					var cardUvDiv = $(`<div class="uv-index my-auto mx-auto col-xs-4">`);
 					cardUvDiv.html(
@@ -194,8 +219,25 @@ $(document).ready(function () {
 					);
 					cardFooterDiv.append(cardUvDiv);
 
+					// dynamically update the uv index color based on rating
+					if (forecast.daily[i].uvi.toFixed(0) < 4) {
+						$(cardUvDiv).css("color", "green");
+					}
+					if (forecast.daily[i].uvi.toFixed(0) >= 4 || uvIndex <= 6) {
+						$(cardUvDiv).css("color", "yellow");
+					}
+					if (forecast.daily[i].uvi.toFixed(0) > 6) {
+						$(cardUvDiv).css("color", "red");
+					}
+
+					// ——————————————————————— //
+					// ——————————————————————— //
+					// append the footer to the main card itself
+					cardDiv.append(cardBodyDiv);
 					cardDiv.append(cardFooterDiv);
 
+					// ——————————————————————— //
+					// ——————————————————————— //
 					// increment the count by 1 so next time we come through the dates are correct
 					count++;
 
