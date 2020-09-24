@@ -11,6 +11,9 @@ $(document).ready(function () {
 	$(".submit").on("click", function (e) {
 		e.preventDefault();
 
+		// Will need to use the following code in order to clear the blocks as each new search is made -- but first need to create the js code that will dynamically create the current weather card
+		// $(".weather-row-1").empty();
+
 		city = $(".city-search").val();
 		state = $(".state-search").val();
 
@@ -172,9 +175,32 @@ $(document).ready(function () {
 
 					// ——————————————————————— //
 					// temperature/description
-					var maxTemp = forecast.daily[i].max;
-					var minTemp = forecast.daily[i].min;
-					var forecastDesc = forecast.daily[i].weather.description;
+					var maxTemp = forecast.daily[i].temp.max.toFixed(0);
+					var minTemp = forecast.daily[i].temp.min.toFixed(0);
+					var forecastDesc = forecast.daily[i].weather[0].description;
+
+					cardTempDiv.html(
+						`<h4 class="temp-num text-center">${maxTemp}°F <span class="small">${minTemp}°F</span></h4>
+						<h6>${forecastDesc}</h6>`
+					);
+					cardBodyDiv.append(cardTempDiv);
+
+					// dynamically change the color of the weather block borders based on temp
+					if (maxTemp <= 50) {
+						$(cardDiv).removeClass("border-warning");
+						$(cardDiv).removeClass("border-danger");
+						$(cardDiv).addClass("border-info");
+					}
+					if (maxTemp > 50 && maxTemp <= 79) {
+						$(cardDiv).removeClass("border-info");
+						$(cardDiv).removeClass("border-danger");
+						$(cardDiv).addClass("border-warning");
+					}
+					if (maxTemp > 79) {
+						$(cardDiv).removeClass("border-info");
+						$(cardDiv).removeClass("border-warning");
+						$(cardDiv).addClass("border-danger");
+					}
 
 					// ——————————————————————— //
 					// weather icon
