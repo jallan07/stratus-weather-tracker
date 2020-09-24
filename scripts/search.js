@@ -7,25 +7,59 @@ $(document).ready(function () {
 	var city;
 	var state;
 
-	// collect user input from the search form in the main header, and pass that information into the city and state variables above
-	$(".submit").on("click", function (e) {
-		e.preventDefault();
+	function saveSearch(cityData, stateData) {
+		var currentData = JSON.parse(localStorage.getItem("saved-searches")) || [];
+		var dataObj = {
+			city: cityData,
+			state: stateData,
+		};
+		currentData.push(dataObj);
+		currentData = currentData.slice(0, 10);
+		localStorage.setItem("saved-searches", JSON.stringify(currentData));
+	}
 
+	// collect user input from the search form in the main header, and pass that information into the city and state variables above
+
+	function renderBtns() {
+		var currentData = JSON.parse(localStorage.getItem("saved-searches")) || [];
+		for (var i = 0; i < currentData.length; i++) {
+			let city = currentData[i].city;
+			let state = currentData[i].state;
+			$("#saved-searches").append(
+				`<button class="btn btn-secondary mx-1 my-1 saved-button">${city}, ${state}</button>`
+			);
+		}
+	}
+
+	$(document).on("click", ".saved-button", function () {
+		let value = $(this).text();
+		value = value.split(", ");
+		city = value[0];
+		state = value[1];
+		searchWeather(city, state);
+	});
+
+	$(".submit").on("click", function (e) {
+		$("#saved-searches").empty();
+		e.preventDefault();
+		city = $(".city-search").val();
+		state = $(".state-search").val();
+		searchWeather(city, state);
+		renderBtns();
+	});
+
+	function searchWeather(city, state) {
 		// Will need to use the following code in order to clear the blocks as each new search is made -- but first need to create the js code that will dynamically create the current weather card
 		// $(".weather-row-1").empty();
 
-		city = $(".city-search").val();
-		state = $(".state-search").val();
-
-		if ($(".city-search").val() === "") {
+		if (city === "") {
 			alert("You must enter both a city AND a state name to continue.");
 			return;
-		} else if ($(".state-search").val() === "Select a state") {
+		} else if (state === "Select a state") {
 			alert("You must enter both a city AND a state name to continue.");
 			return;
 		} else {
-			city = $(".city-search").val();
-			state = $(".state-search").val();
+			saveSearch(city, state);
 		}
 
 		var apiKey = "63f6253feb7c1af59a49c4232d8efc07";
@@ -274,7 +308,7 @@ $(document).ready(function () {
 				}
 			});
 		});
-	});
+	}
 
 	// ———————————————————————— //
 	// —— END Document Ready —— //
