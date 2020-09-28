@@ -84,12 +84,13 @@ $(document).ready(function () {
 		}
 
 		var apiKey = "63f6253feb7c1af59a49c4232d8efc07";
-		var queryURL = `https://api.openweathermap.org/data/2.5/weather?units=imperial&q=${city},${state}&appid=${apiKey}`;
+		var queryURL = `https://api.openweathermap.org/data/2.5/weather?units=imperial&q=${city},US-${state}&appid=${apiKey}`;
 
 		$.ajax({
 			url: queryURL,
 			method: "GET",
 		}).then(function (response) {
+			console.log(queryURL);
 			console.log(response);
 
 			// define lat lon coordinate variables so that we can pull the uv index with a secondary api call
