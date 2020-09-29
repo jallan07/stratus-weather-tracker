@@ -255,7 +255,7 @@ $(document).ready(function () {
 				// ———————————————————— //
 
 				// ———————— DYNAMICALLY CREATE THE FORECAST BLOCKS ———————— //
-				for (var i = 0; i < 5; i++) {
+				for (var i = 1; i < 6; i++) {
 					// create the main card container
 					var cardContainer = $(
 						`<div class="col-sm-6 col-md-4 d-flex card-container">`
