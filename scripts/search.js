@@ -254,8 +254,6 @@ $(document).ready(function () {
 				// ———————————————————— //
 				// ———————————————————— //
 
-				// set count = 1 so that we can use this to increment our forecast day count
-				var count = 1;
 				// ———————— DYNAMICALLY CREATE THE FORECAST BLOCKS ———————— //
 				for (var i = 0; i < 5; i++) {
 					// create the main card container
@@ -273,20 +271,15 @@ $(document).ready(function () {
 					var cardHeader = $(`<div class="card-header text-center"><span>`);
 
 					// ——————————————————————— //
-					// get today's date
-					var getDate = new Date();
-					// convert today's date to a string
-					var date = getDate.toDateString();
-					// split today's date
-					var dateArr = date.split(" ");
-					// set the day number equal to the day + the current count
-					dayNum = moment().add(count, "days").date();
-					// set the day variable so that it reads like Sep 24, 2020
-					var day = dateArr[1] + " " + dayNum + ", " + dateArr[3];
+					// get the timestamp from each individual forecast object
+					var timeStamp = forecast.daily[i].dt;
+					// convert the timestamp to a readable string for the user
+					var correctDate = moment(timeStamp * 1000).format("MMM Do[,] YYYY");
+					console.log(correctDate);
 
 					// ——————————————————————— //
 					// print the date elements to the dom
-					cardHeader.text(day);
+					cardHeader.text(correctDate);
 					cardDiv.append(cardHeader);
 					cardContainer.append(cardDiv);
 					$(".weather-row-1").append(cardContainer);
@@ -388,8 +381,6 @@ $(document).ready(function () {
 
 					// ——————————————————————— //
 					// ——————————————————————— //
-					// increment the count by 1 so next time we come through the dates are correct
-					count++;
 
 					// unhide the corresponding elements once all data has been retreived from the api
 					$(".weather-row-1").removeClass("d-none");
