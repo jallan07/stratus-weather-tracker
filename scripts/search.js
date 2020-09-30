@@ -84,7 +84,7 @@ $(document).ready(function () {
 		}
 
 		var apiKey = "63f6253feb7c1af59a49c4232d8efc07";
-		var queryURL = `https://api.openweathermap.org/data/2.5/weather?units=imperial&q=${city},US-${state}&appid=${apiKey}`;
+		var queryURL = `https://api.openweathermap.org/data/2.5/weather?units=imperial&q=${city},${state},US&appid=${apiKey}`;
 
 		$.ajax({
 			url: queryURL,
