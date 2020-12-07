@@ -2,12 +2,16 @@
 
 In this project, I built a weather dashboard that runs in the browser. By calling and retreiving data from OpenWeather's one-call API, I was able to build a dynamic dashboard that updates automatically as new searches are entered by the user. Border colors update based on the temperature for that day. UV Index colors also change based on the value of that number.
 
-## Resources Used
+## Technologies Used
 
 - OpenWeather API
 - Bootstrap
 - jQuery
 - Moment.js
+
+## License
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## User Story
 
